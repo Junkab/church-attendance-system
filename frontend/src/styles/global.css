@@ -1,0 +1,64 @@
+/* =====================================================
+   RFP Ministries — Global Styles
+   ===================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap');
+
+:root {
+  /* palette — slightly lighter background for softer, more readable display */
+  --clr-bg:          #14141c;
+  --clr-surface:     rgba(24, 24, 36, 0.82);
+  --clr-surface-hi:  rgba(36, 36, 52, 0.92);
+  --clr-border:      rgba(200, 170, 100, 0.18);
+  --clr-gold:        #c8aa64;
+  --clr-gold-light:  #e8d48b;
+  --clr-gold-dim:    rgba(200,170,100,0.35);
+  --clr-text:        #f0ead6;
+  --clr-text-muted:  #9a9088;
+  --clr-danger:      #e05555;
+  --clr-danger-bg:   rgba(224, 85, 85, 0.12);
+  --clr-success:     #5ebd7a;
+  --clr-success-bg:  rgba(94, 189, 122, 0.12);
+  --clr-input-bg:    rgba(22, 22, 34, 0.7);
+  --clr-overlay:     rgba(0, 0, 0, 0.45);
+
+  /* typography */
+  --font-display: 'Cinzel', serif;
+  --font-body:    'Raleway', sans-serif;
+
+  /* spacing */
+  --radius:       10px;
+  --radius-lg:    16px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  background: var(--clr-bg);
+  color: var(--clr-text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* prevent pull-to-refresh on kiosk tablets */
+  overscroll-behavior: none;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* ── scrollbar (dark) ──────────────────────────── */
+::-webkit-scrollbar        { width: 6px; }
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  { background: var(--clr-gold-dim); border-radius: 3px; }
+
+/* ── selection ─────────────────────────────────── */
+::selection {
+  background: var(--clr-gold-dim);
+  color: var(--clr-text);
+}
