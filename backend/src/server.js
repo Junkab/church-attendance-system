@@ -12,7 +12,7 @@ const app  = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors({
-  origin: process.env.FRONTEND_ORIGIN || 'http://localhost:3000',
+  origin: process.env.FRONTEND_ORIGIN || 'https://church-frontend-ql69.onrender.com',
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type'],
 }));
