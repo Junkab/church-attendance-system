@@ -1,4 +1,11 @@
-require('dotenv').config();
+// Safely load dotenv for local development
+// In production (Railway), environment variables are already set by the platform
+try {
+  require('dotenv').config();
+} catch (err) {
+  // dotenv not installed - this is fine in production environments like Railway
+  console.log('[ENV] Using platform environment variables (dotenv not loaded)');
+}
 const express   = require('express');
 const cors      = require('cors');
 const pool      = require('./config/db');
