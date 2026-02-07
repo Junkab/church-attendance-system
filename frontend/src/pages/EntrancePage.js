@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/global.css';
-import MemberFlow  from '../components/MemberFlow';
+import MemberFlow from '../components/MemberFlow';
 import VisitorFlow from '../components/VisitorFlow';
-import PinModal    from '../components/PinModal';
+import PinModal from '../components/PinModal';
 
 /* ── service options ────────────────────────────── */
 const SERVICES = [
@@ -16,28 +16,28 @@ const SERVICES = [
 
 /* ── main page ──────────────────────────────────── */
 export default function EntrancePage() {
-  const navigate              = useNavigate();
+  const navigate = useNavigate();
   const [service, setService] = useState('');
-  const [tab, setTab]         = useState('member'); // 'member' | 'visitor'
+  const [tab, setTab] = useState('member'); // 'member' | 'visitor'
   const [showPin, setShowPin] = useState(false);
 
-  // #region agent log
+  const API_URL = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
-    fetch('http://127.0.0.1:7242/ingest/2c2b50fc-3f23-4f16-b841-fa037b667636', {
+    fetch(`${API_URL}/ingest/2c2b50fc-3f23-4f16-b841-fa037b667636`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        sessionId:   'debug-session',
-        runId:       'pre-fix',
-        hypothesisId:'SVC-1',
-        location:    'EntrancePage.js:service',
-        message:     'Service selection changed',
-        data:        { service },
-        timestamp:   Date.now(),
+        sessionId: 'debug-session',
+        runId: 'pre-fix',
+        hypothesisId: 'SVC-1',
+        location: 'EntrancePage.js:service',
+        message: 'Service selection changed',
+        data: { service },
+        timestamp: Date.now(),
       }),
-    }).catch(() => {});
+    }).catch(() => { });
   }, [service]);
-  // #endregion
 
   return (
     <div className="entrance-root">
@@ -97,7 +97,7 @@ export default function EntrancePage() {
               Please select a service above to continue.
             </div>
           ) : tab === 'member' ? (
-            <MemberFlow  key={`m-${service}`} service={service} />
+            <MemberFlow key={`m-${service}`} service={service} />
           ) : (
             <VisitorFlow key={`v-${service}`} service={service} />
           )}
@@ -106,7 +106,7 @@ export default function EntrancePage() {
         {/* ── history button ─────────────────────── */}
         <button className="entrance-history-btn" onClick={() => setShowPin(true)}>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
           </svg>
           History
         </button>
@@ -122,7 +122,7 @@ export default function EntrancePage() {
       {showPin && (
         <PinModal
           onSuccess={() => { setShowPin(false); navigate('/history'); }}
-          onClose={()  => setShowPin(false)}
+          onClose={() => setShowPin(false)}
         />
       )}
 
