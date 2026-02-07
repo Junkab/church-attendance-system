@@ -1,7 +1,8 @@
 # Dependencies
 node_modules/
+package-lock.json
 
-# Environment variables - NEVER commit this file!
+# Environment variables - NEVER commit these!
 .env
 .env.local
 .env.production
@@ -13,6 +14,7 @@ logs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
 
 # Runtime data
 pids/
@@ -20,36 +22,14 @@ pids/
 *.seed
 *.pid.lock
 
-# Directory for instrumented libs
-lib-cov/
+# Coverage
 coverage/
-
-# nyc test coverage
 .nyc_output/
+*.lcov
 
-# Compiled binary addons
-build/Release/
-
-# Dependency directories
-jspm_packages/
-
-# TypeScript cache
-*.tsbuildinfo
-
-# Optional npm cache directory
-.npm
-
-# Optional REPL history
-.node_repl_history
-
-# OS files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
+# Build files
+dist/
+build/
 
 # IDE files
 .vscode/
@@ -57,6 +37,18 @@ Thumbs.db
 *.swp
 *.swo
 *~
+.DS_Store
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
 
 # Railway
 .railway/
+
+# Testing
+.jest/

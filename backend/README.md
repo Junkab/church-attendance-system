@@ -1,179 +1,428 @@
-# RFP Attendance Backend - Fixed for Railway
+# Church Attendance System - Backend API
 
-This is the **FIXED version** of your backend that will deploy successfully on Railway.
+**Production-ready Node.js + Express + MySQL backend deployed on Railway**
 
-## What Was Fixed
+## 📋 Table of Contents
 
-### The Problem
-Your backend was crashing on Railway with:
+- [Overview](#overview)
+- [Features](#features)
+- [Project Structure](#project-structure)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [API Endpoints](#api-endpoints)
+- [Deployment](#deployment)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+
+---
+
+## 🎯 Overview
+
+Backend API for the Church Attendance System. Manages members, attendance tracking, visitor registration, and historical data with MySQL database on Railway.
+
+**Tech Stack:**
+- Node.js 16+
+- Express.js 4.x
+- MySQL 8.0 (via Railway addon)
+- mysql2 (connection pooling)
+- CORS enabled for Render frontend
+
+---
+
+## ✨ Features
+
+- ✅ **Professional MySQL Connection Pool** - 10 concurrent connections with auto-retry
+- ✅ **Railway MySQL Integration** - SSL/TLS enabled, mysql.railway.internal
+- ✅ **Environment Validation** - Fails fast if configuration missing
+- ✅ **Comprehensive Error Handling** - Specific solutions for each error type
+- ✅ **CORS Configured** - Works with Render frontend
+- ✅ **Health Monitoring** - `/api/health` endpoint
+- ✅ **Graceful Shutdown** - Proper connection cleanup
+- ✅ **Diagnostic Tool** - `npm run diagnose` for troubleshooting
+
+---
+
+## 📁 Project Structure
+
 ```
-Error: Cannot find module 'dotenv'
+backend/
+├── src/
+│   ├── config/
+│   │   └── db.js              # MySQL connection pool (Railway SSL enabled)
+│   ├── middleware/
+│   │   └── validation.js      # Input validation middleware
+│   ├── routes/
+│   │   ├── members.js         # Member management endpoints
+│   │   ├── attendance.js      # Attendance tracking endpoints
+│   │   ├── visitors.js        # Visitor registration endpoints
+│   │   └── history.js         # Historical data endpoints
+│   ├── diagnose.js            # MySQL diagnostic tool
+│   └── server.js              # Express application entry point
+├── .env                       # Environment variables (not in Git)
+├── .env.example               # Environment template
+├── .gitignore                 # Git ignore rules
+├── package.json               # Dependencies and scripts
+└── README.md                  # This file
 ```
 
-### The Solution
-Changed `src/server.js` line 1 from:
-```javascript
-require('dotenv').config();
-```
+---
 
-To:
-```javascript
-try {
-  require('dotenv').config();
-} catch (err) {
-  console.log('[ENV] Using platform environment variables (dotenv not loaded)');
-}
-```
+## 🔧 Prerequisites
 
-This makes dotenv **optional** - it works whether dotenv is installed or not!
+- **Node.js** 16.0.0 or higher
+- **npm** 8.0.0 or higher
+- **MySQL** 8.0+ (Railway provides this)
+- **Git** for version control
 
-## How to Deploy
+---
 
-### Step 1: Replace Your Backend Files
+## 📥 Installation
 
-Replace your current `backend/` folder with this fixed version.
-
-### Step 2: Commit and Push
+### 1. Clone Repository
 
 ```bash
-git add .
-git commit -m "Fix: Make dotenv optional for Railway production"
-git push origin main
+git clone https://github.com/your-username/church-attendance-backend.git
+cd church-attendance-backend
 ```
 
-### Step 3: Configure Railway Environment Variables
+### 2. Install Dependencies
 
-In Railway Dashboard → Your Project → Variables, set:
-
+```bash
+npm install
 ```
-DB_HOST=<from Railway MySQL addon>
+
+### 3. Configure Environment
+
+```bash
+# Copy template
+cp .env.example .env
+
+# Edit .env with your configuration
+nano .env
+```
+
+---
+
+## ⚙️ Configuration
+
+### Environment Variables
+
+Create `.env` file in root directory:
+
+```env
+# Database (Railway MySQL)
+DB_HOST=mysql.railway.internal
 DB_PORT=3306
-DB_USER=<from Railway MySQL addon>
-DB_PASSWORD=<from Railway MySQL addon>
-DB_NAME=<from Railway MySQL addon>
+DB_USER=root
+DB_PASSWORD=your_railway_mysql_password
+DB_NAME=railway
+
+# Server
+PORT=3001
+FRONTEND_ORIGIN=https://church-frontend-ql69.onrender.com
+
+# Environment
+NODE_ENV=production
+```
+
+### Railway Configuration
+
+For production on Railway, set variables in **Railway Dashboard → Variables**:
+
+```env
+DB_HOST=${{MYSQLHOST}}
+DB_PORT=${{MYSQLPORT}}
+DB_USER=${{MYSQLUSER}}
+DB_PASSWORD=${{MYSQLPASSWORD}}
+DB_NAME=${{MYSQLDATABASE}}
 FRONTEND_ORIGIN=https://church-frontend-ql69.onrender.com
 NODE_ENV=production
 ```
 
-**Note**: If you're using Railway's MySQL addon, DB_* variables are auto-populated!
+---
 
-### Step 4: Deploy
+## 🚀 Usage
 
-Railway will automatically detect your push and redeploy.
-
-### Step 5: Verify
-
-Check Railway logs - you should see:
-
-```
-[ENV] Using platform environment variables (dotenv not loaded)
-✦ RFP Attendance Backend (MySQL) running on http://localhost:3001
-```
-
-Test the health endpoint:
-```bash
-curl https://your-railway-url.railway.app/api/health
-```
-
-Expected response:
-```json
-{"status":"ok","db":"connected"}
-```
-
-## File Structure
-
-```
-backend/
-├── .env                    # Local development only - NOT deployed to Railway
-├── .gitignore              # Prevents .env from being committed
-├── package.json            # Dependencies configuration
-├── package-lock.json       # Lock file
-├── diagnose-mysql.js       # MySQL diagnostic tool
-└── src/
-    ├── server.js           # ✅ FIXED - dotenv now optional
-    ├── config/
-    │   └── db.js           # Database connection
-    ├── routes/
-    │   ├── members.js      # Member routes
-    │   ├── attendance.js   # Attendance routes
-    │   ├── visitors.js     # Visitor routes
-    │   └── history.js      # History routes
-    └── middleware/
-        └── validation.js   # Input validation
-```
-
-## Key Changes
-
-1. **src/server.js** - Line 1 wrapped in try-catch
-2. **.gitignore** - Added to prevent committing sensitive files
-
-## Why This Works
-
-### Local Development
-- `.env` file exists
-- `dotenv.config()` loads successfully
-- Environment variables come from `.env`
-
-### Railway Production
-- No `.env` file (Railway provides env vars directly)
-- `dotenv.config()` might fail, but **try-catch prevents crash**
-- Environment variables come from Railway platform
-
-**Both use `process.env.*` the same way!**
-
-## Testing Locally
+### Development Mode
 
 ```bash
-npm install
+npm run dev
+```
+
+Starts server with nodemon (auto-restart on file changes).
+
+### Production Mode
+
+```bash
 npm start
 ```
 
-Should output:
+Starts server with Node.js (used by Railway).
+
+### Run Diagnostics
+
+```bash
+npm run diagnose
 ```
-✦ RFP Attendance Backend (MySQL) running on http://localhost:3001
+
+Tests MySQL connection and configuration.
+
+### Expected Output
+
+```
+╔══════════════════════════════════════════════════════════╗
+║  🗄️  MySQL Connection Pool Initialization               ║
+╚══════════════════════════════════════════════════════════╝
+
+📍 Environment:  PRODUCTION
+🔐 SSL Required: YES (Railway MySQL)
+🌐 Host:         mysql.railway.internal
+🔢 Port:         3306
+💾 Database:     railway
+
+✅ Database connected successfully
 ```
 
-## Troubleshooting
+---
 
-### Backend Still Crashes on Railway
+## 🛣️ API Endpoints
 
-1. **Check environment variables** are set in Railway dashboard
-2. **Verify MySQL service** is running in Railway
-3. **Check logs** for specific error messages
-4. **Ensure database credentials** match Railway MySQL addon
+### Health Check
 
-### Database Connection Fails
+```http
+GET /api/health
+```
 
-Make sure Railway environment variables match your MySQL addon:
-- `DB_HOST` should be the Railway MySQL host
-- `DB_PASSWORD` should be from Railway, not your local password
+**Response:**
+```json
+{
+  "status": "ok",
+  "db": "connected",
+  "timestamp": "2026-02-07T08:30:00.000Z"
+}
+```
 
-### Port Issues
+### Members
 
-Railway automatically sets the `PORT` environment variable. Your app uses:
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/members` | List all members |
+| POST | `/api/members` | Create new member |
+| GET | `/api/members/:id` | Get member by ID |
+| PUT | `/api/members/:id` | Update member |
+| DELETE | `/api/members/:id` | Delete member |
+
+### Attendance
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/attendance` | List attendance records |
+| POST | `/api/attendance` | Mark attendance |
+| GET | `/api/attendance/:id` | Get attendance by ID |
+| DELETE | `/api/attendance/:id` | Delete attendance record |
+
+### Visitors
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/visitors` | List all visitors |
+| POST | `/api/visitors` | Register new visitor |
+| GET | `/api/visitors/:id` | Get visitor by ID |
+| DELETE | `/api/visitors/:id` | Delete visitor |
+
+### History
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/history` | Get attendance history |
+
+---
+
+## 🚢 Deployment
+
+### Deploy to Railway
+
+1. **Push to Git**
+
+```bash
+git add .
+git commit -m "Deploy to Railway"
+git push origin main
+```
+
+2. **Configure Railway Variables**
+
+Railway Dashboard → Your Project → Variables:
+
+```env
+DB_HOST=${{MYSQLHOST}}
+DB_PORT=${{MYSQLPORT}}
+DB_USER=${{MYSQLUSER}}
+DB_PASSWORD=${{MYSQLPASSWORD}}
+DB_NAME=${{MYSQLDATABASE}}
+FRONTEND_ORIGIN=https://church-frontend-ql69.onrender.com
+NODE_ENV=production
+```
+
+3. **Deploy**
+
+Railway auto-deploys on Git push.
+
+4. **Verify**
+
+```bash
+curl https://your-backend.railway.app/api/health
+```
+
+### Update Frontend
+
+Update frontend to use Railway backend URL:
+
 ```javascript
-const PORT = process.env.PORT || 3001;
+const API_URL = 'https://your-backend.railway.app';
 ```
 
-This is correct - Railway will override it automatically.
+---
 
-## Security Notes
+## 🐛 Troubleshooting
 
-⚠️ **IMPORTANT**: The `.env` file is now in `.gitignore` and should **NEVER** be committed to Git!
+### Issue: `ECONNREFUSED 127.0.0.1:3306`
 
-Your `.env` contains:
-- Database passwords
-- Sensitive credentials
-- Local configuration
+**Cause:** Environment variables not set
 
-These should only exist on your local machine. Railway gets its configuration from environment variables you set in the dashboard.
+**Solution:**
+1. Check Railway Variables are configured
+2. Verify `DB_HOST=mysql.railway.internal`
+3. Redeploy
 
-## Support
+### Issue: `ER_ACCESS_DENIED_ERROR`
 
-If you still have issues:
-1. Check Railway deployment logs
-2. Verify all environment variables are set
-3. Test the `/api/health` endpoint
-4. Check that MySQL service is running
+**Cause:** Wrong password
 
-The fix provided is production-tested and resolves the "Cannot find module 'dotenv'" error.
+**Solution:**
+1. Railway Dashboard → MySQL → Connect
+2. Copy password exactly
+3. Update `DB_PASSWORD`
+
+### Issue: CORS errors
+
+**Cause:** Wrong frontend URL
+
+**Solution:**
+1. Verify `FRONTEND_ORIGIN` matches Render URL exactly
+2. Include `https://`, no trailing slash
+3. Redeploy backend
+
+### Run Diagnostics
+
+```bash
+npm run diagnose
+```
+
+This will test:
+- Environment variables
+- MySQL connection
+- SSL configuration
+- Connection pooling
+
+---
+
+## 📊 Database Schema
+
+### Members Table
+
+```sql
+CREATE TABLE members (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
+  phone VARCHAR(20),
+  email VARCHAR(100),
+  gender ENUM('Male', 'Female'),
+  member_id VARCHAR(50) UNIQUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### Attendance Table
+
+```sql
+CREATE TABLE attendance (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  member_id INT,
+  service_date DATE NOT NULL,
+  service_type VARCHAR(50),
+  present BOOLEAN DEFAULT true,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (member_id) REFERENCES members(id)
+);
+```
+
+### Visitors Table
+
+```sql
+CREATE TABLE visitors (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
+  phone VARCHAR(20),
+  email VARCHAR(100),
+  visit_date DATE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+---
+
+## 🔒 Security
+
+- ✅ Environment variables (no hardcoded credentials)
+- ✅ SSL/TLS encryption for database
+- ✅ CORS protection (whitelist frontend)
+- ✅ Input validation middleware
+- ✅ Parameterized SQL queries (prevent injection)
+- ✅ `.env` in `.gitignore`
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create feature branch: `git checkout -b feature/your-feature`
+3. Commit changes: `git commit -m 'Add some feature'`
+4. Push to branch: `git push origin feature/your-feature`
+5. Submit pull request
+
+---
+
+## 📝 License
+
+ISC License
+
+---
+
+## 📞 Support
+
+For issues or questions:
+
+1. Check [Troubleshooting](#troubleshooting) section
+2. Run `npm run diagnose`
+3. Check Railway logs
+4. Review `.env` configuration
+
+---
+
+## 🎉 Acknowledgments
+
+- Built for Church Attendance Management
+- Deployed on Railway (backend) + Render (frontend)
+- MySQL database with connection pooling
+- Production-ready error handling
+
+---
+
+**Version:** 2.0.0  
+**Last Updated:** February 2026  
+**Status:** Production Ready ✅

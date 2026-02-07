@@ -1,20 +1,34 @@
 {
-  "name": "rfp-attendance-backend",
-  "version": "1.0.0",
-  "private": true,
+  "name": "church-attendance-backend",
+  "version": "2.0.0",
+  "description": "Church Attendance System - Backend API with Railway MySQL",
+  "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "npx nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "diagnose": "node src/diagnose.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "church",
+    "attendance",
+    "mysql",
+    "railway",
+    "api"
+  ],
+  "author": "Church Attendance System",
+  "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^4.22.1",
-    "mysql2": "^3.6.5",
-    "pdfkit": "^0.14.0",
-    "uuid": "^9.0.0"
+    "mysql2": "^3.6.5"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
   }
 }
