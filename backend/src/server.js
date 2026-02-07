@@ -154,7 +154,7 @@ app.use((err, req, res, next) => {
  */
 async function startServer() {
   try {
-    app.listen(PORT, () => {
+    const server = app.listen(PORT, () => {
       console.log('╔══════════════════════════════════════════════════════════╗');
       console.log('║  ✅ Server Started Successfully                          ║');
       console.log('╚══════════════════════════════════════════════════════════╝\n');
@@ -168,6 +168,9 @@ async function startServer() {
       console.log(`   • Visitors: http://localhost:${PORT}/api/visitors`);
       console.log(`   • History: http://localhost:${PORT}/api/history\n`);
     });
+    
+    // Store server reference for graceful shutdown
+    global.httpServer = server;
   } catch (error) {
     console.error('❌ Failed to start server:', error.message);
     process.exit(1);
@@ -188,9 +191,11 @@ async function gracefulShutdown(signal) {
   console.log(`\n📴 Received ${signal}, shutting down gracefully...`);
   
   // Close server (stop accepting new connections)
-  server.close(() => {
-    console.log('✅ HTTP server closed');
-  });
+  if (global.httpServer) {
+    global.httpServer.close(() => {
+      console.log('✅ HTTP server closed');
+    });
+  }
   
   // Database connections are already handled by db.js
   
