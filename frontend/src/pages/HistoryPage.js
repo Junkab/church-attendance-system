@@ -63,21 +63,7 @@ export default function HistoryPage() {
   /* format helpers */
   const fmtDate = (d) => {
     if (!d) return '—';
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/2c2b50fc-3f23-4f16-b841-fa037b667636', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        sessionId:   'debug-session',
-        runId:       'pre-fix',
-        hypothesisId:'DATE-1',
-        location:    'HistoryPage.js:fmtDate',
-        message:     'Formatting date',
-        data:        { raw: d, rawType: typeof d },
-        timestamp:   Date.now(),
-      }),
-    }).catch(() => {});
-    // #endregion
+  
     // value already comes as an ISO string with timezone (e.g. 2026-02-04T00:00:00.000Z)
     // parse directly and format in UTC to avoid client timezone shifting the date
     const dt = new Date(d);
@@ -91,21 +77,7 @@ export default function HistoryPage() {
   };
   const fmtTime = (t) => {
     if (!t) return '—';
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/2c2b50fc-3f23-4f16-b841-fa037b667636', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        sessionId:   'debug-session',
-        runId:       'pre-fix',
-        hypothesisId:'TIME-1',
-        location:    'HistoryPage.js:fmtTime',
-        message:     'Formatting time',
-        data:        { raw: t, rawType: typeof t },
-        timestamp:   Date.now(),
-      }),
-    }).catch(() => {});
-    // #endregion
+    
     const dt = new Date(t);
     if (Number.isNaN(dt.getTime())) return '—';
     // Treat stored times as UTC so they display as originally recorded,
