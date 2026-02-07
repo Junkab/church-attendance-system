@@ -23,21 +23,7 @@ export default function EntrancePage() {
 
   const API_URL = process.env.REACT_APP_API_URL;
 
-  useEffect(() => {
-    fetch(`${API_URL}/ingest/2c2b50fc-3f23-4f16-b841-fa037b667636`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        sessionId: 'debug-session',
-        runId: 'pre-fix',
-        hypothesisId: 'SVC-1',
-        location: 'EntrancePage.js:service',
-        message: 'Service selection changed',
-        data: { service },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => { });
-  }, [service]);
+ 
 
   return (
     <div className="entrance-root">
