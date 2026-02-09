@@ -1,15 +1,13 @@
 import axios from 'axios';
 
+// Use REACT_APP_API_URL if available, else fallback to localhost for dev
 const BASE = process.env.REACT_APP_API_URL
   ? `${process.env.REACT_APP_API_URL}/api`
-  : '/api';
-
+  : 'http://localhost:3001/api'; // dev fallback
 
 /* ─── Members ────────────────────────────────────── */
 export async function smartSearch(q) {
-  const { data } = await axios.get(`${BASE}/members/search`, {
-    params: { q },
-  });
+  const { data } = await axios.get(`${BASE}/members/search`, { params: { q } });
   return data;
 }
 
@@ -25,8 +23,8 @@ export async function registerAttendance(memberId, service) {
 /* ─── Visitors ───────────────────────────────────── */
 export async function registerVisitor({ fullName, phone, gender, firstTime, service }) {
   const { data } = await axios.post(`${BASE}/visitors/register`, {
-    full_name:  fullName,
-    phone:      phone || '',
+    full_name: fullName,
+    phone: phone || '',
     gender,
     first_time: firstTime,
     service,
@@ -42,11 +40,10 @@ export async function fetchHistory(pin) {
 
 export async function downloadHistoryPdf(pin) {
   const response = await axios.get(`${BASE}/history/pdf`, {
-    params:       { pin },
+    params: { pin },
     responseType: 'blob',
   });
-  // trigger browser download
-  const url  = window.URL.createObjectURL(response.data);
+  const url = window.URL.createObjectURL(response.data);
   const link = document.createElement('a');
   link.href = url;
   link.download = 'RFP_Attendance_History.pdf';
