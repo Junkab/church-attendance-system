@@ -1,13 +1,9 @@
 import axios from 'axios';
 
-// Configure axios for production: use full backend URL as base
-// In development, this will use the relative path '/api'
-// In production (Render), REACT_APP_API_URL is set to the Railway backend URL
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
-const BASE = `${API_URL}/api`;
+const BASE = process.env.REACT_APP_API_URL
+  ? `${process.env.REACT_APP_API_URL}/api`
+  : '/api';
 
-// Configure axios default base URL for all requests
-axios.defaults.baseURL = API_URL;
 
 /* ─── Members ────────────────────────────────────── */
 export async function smartSearch(q) {
